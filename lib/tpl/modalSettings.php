@@ -41,6 +41,14 @@
 
                         <div class="checkbox">
                             <label>
+                                <input type="checkbox" id="isDisabledBase64Decode" value="1"
+                                       <?php if (@$_COOKIE['isDisabledBase64Decode'] != 1) { ?>checked="checked"<?php } ?>>
+                                before display: base64_decode()
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
                                 <input type="checkbox" id="isDisabledUnserialization" value="1"
                                        <?php if (@$_COOKIE['isDisabledUnserialization'] != 1) { ?>checked="checked"<?php } ?>>
                                 before display: unserialize()
