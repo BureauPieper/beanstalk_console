@@ -223,6 +223,10 @@ class BeanstalkInterface {
         $this->_contentType = false;
         $out = $pData;
         $data = null;
+        
+        if (@$_COOKIE['isDisabledBase64Decode'] != 1) {
+            $data = base64_decode($data);
+        }        
 
         if (@$_COOKIE['isDisabledUnserialization'] != 1) {
             $mixed = set_error_handler(array($this, 'exceptions_error_handler'));
@@ -240,9 +244,6 @@ class BeanstalkInterface {
             $this->_contentType = 'php';
             $out = $data;
         } else {
-            if (@$_COOKIE['isDisabledBase64Decode'] != 1) {
-                $data = base64_decode($data);
-            }
             if (@$_COOKIE['isDisabledJsonDecode'] != 1) {
                 $data = @json_decode($pData, true);
             }
