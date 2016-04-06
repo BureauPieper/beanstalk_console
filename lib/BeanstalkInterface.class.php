@@ -240,6 +240,9 @@ class BeanstalkInterface {
             $this->_contentType = 'php';
             $out = $data;
         } else {
+            if (@$_COOKIE['isDisabledBase64Decode'] != 1) {
+                $data = base64_decode($data);
+            }
             if (@$_COOKIE['isDisabledJsonDecode'] != 1) {
                 $data = @json_decode($pData, true);
             }
