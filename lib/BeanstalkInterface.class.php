@@ -223,15 +223,14 @@ class BeanstalkInterface {
         $this->_contentType = false;
         $out = $pData;
         $data = null;
-        
-        if (@$_COOKIE['isDisabledBase64Decode'] != 1) {
-            $data = base64_decode($data);
-        }        
 
         if (@$_COOKIE['isDisabledUnserialization'] != 1) {
             $mixed = set_error_handler(array($this, 'exceptions_error_handler'));
             try {
-                $data = unserialize($pData);
+                if (@$_COOKIE['isDisabledBase64Decode'] != 1) {
+                    $data = base64_decode($pData);
+                }
+                $data = unserialize($data ?: $pData);
             } catch (Exception $e) {
                 $data = $e->getMessage();
             }
@@ -244,12 +243,15 @@ class BeanstalkInterface {
             $this->_contentType = 'php';
             $out = $data;
         } else {
+            if (@$_COOKIE['isDisabledBase64Decode'] != 1) {
+                $data = base64_decode($pData);
+            }
             if (@$_COOKIE['isDisabledJsonDecode'] != 1) {
-                $data = @json_decode($pData, true);
+                $data = @json_decode($data ?: $pData, true);
             }
             if ($data) {
                 $this->_contentType = 'json';
-                //$out = $data;
+                $out = $data;
             }
         }
         return $out;
